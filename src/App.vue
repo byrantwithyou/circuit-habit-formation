@@ -8,8 +8,8 @@
               Tutorial
             </v-card-title>
             <v-card-media min-height="300">
-              <video style="display: none" width="480" height="320" autoplay ref="video"></video>
-              <canvas style="display: none" ref="canvas" width="480" height="320"></canvas>
+              <video  style="display: none" width="200" height="120" autoplay ref="video"></video>
+              <canvas style="display: none" ref="canvas"  width="200" height="120"></canvas>
             </v-card-media>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -45,13 +45,18 @@ export default {
     },
     methods: {
       next: function() {
+        if (this.btnWord == "Snapshot") {
+          this.snapshot();
+        }
         this.state = this.state + 1;
         this.state = this.state % 2;
+
       },
       snapshot: function() {
         let context = this.$refs.canvas.getContext("2d");
         let video = this.$refs.video;
-        context.drawImage(video, 0, 0, 480, 320);
+        context.drawImage(video, 0, 0, 200, 120);
+        this.$socket.emit("photo", this.$refs.canvas.toDataURL(), "resistor");
       }
     }
   }
