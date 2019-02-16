@@ -4,14 +4,17 @@
       <v-container>
         <v-flex>
           <v-card>
-            <v-card-actions>
-              <v-btn @click="snapshot">snapshot</v-btn>
-            </v-card-actions>
-            <v-card-media>
-              <video width="480" height="320" autoplay ref="video"></video>
-              <canvas ref="canvas" width="480" height="320"></canvas>
-              <img :src="imgURL" />
+            <v-card-title primary-title>
+              Tutorial
+            </v-card-title>
+            <v-card-media min-height="300">
+              <video style="display: none" width="480" height="320" autoplay ref="video"></video>
+              <canvas style="display: none" ref="canvas" width="480" height="320"></canvas>
             </v-card-media>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn :disabled="disable" @click="next">{{btnWord}}</v-btn>
+            </v-card-actions>
           </v-card>
         </v-flex>
       </v-container>
@@ -20,6 +23,7 @@
 </template>
 
 <script>
+const btnWords = ["Snapshot", "Next", "", "Submit"];
 export default {
     mounted: function() {
       let that = this;
@@ -28,15 +32,26 @@ export default {
         that.$refs.video.srcObject = stream;
       })
     },
-    data: () => ({
-      imgURL: ""
-    }),
+    data: function () {
+      return {
+        state: 3,
+        disable: false
+      }
+    },
+    computed: {
+      btnWord: function() {
+        return btnWords[this.state];
+      }
+    },
     methods: {
+      next: function() {
+        this.state = this.state + 1;
+        this.state = this.state % 2;
+      },
       snapshot: function() {
         let context = this.$refs.canvas.getContext("2d");
         let video = this.$refs.video;
         context.drawImage(video, 0, 0, 480, 320);
-        this.imgURL = this.$refs.canvas.toDataURL();
       }
     }
   }
