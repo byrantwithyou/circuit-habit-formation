@@ -17,6 +17,26 @@
               <v-btn color="primary" icon @click="dialog = false">
                 <v-icon>close</v-icon>
               </v-btn>
+              <v-btn @click="test">Test</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="reviewDialog" width="500">
+          <v-card>
+            <v-card-title class="headline grey lighten-2" primary-title>
+              {{reviewBahavior}}
+            </v-card-title>
+            <v-card-media>
+              <img :src="reviewImg" />
+            </v-card-media>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" @click="reviewRight">
+                Right
+              </v-btn>
+              <v-btn color="primary" @click="reviewWrong">
+                Wrong
+              </v-btn> 
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -55,7 +75,11 @@ export default {
         disable: false,
         dialog: false,
         review: "",
-        behavior: ""
+        behavior: "",
+        reviewImg: "",
+        reviewBahavior: "",
+        reviewDialog: false,
+        user: ""
       }
     },
     computed: {
@@ -77,6 +101,14 @@ export default {
         context.drawImage(video, 0, 0, 200, 120);
         this.disable = true;
         this.$socket.emit("photo", this.$refs.canvas.toDataURL(), "resistor");
+      },
+      reviewRight: function() {
+        this.reviewDialog = false;
+        this.$socket.emit("review", 1, this.reviewImg, this.reviewBahavior, this.user);
+      },
+      reviewWrong: function() {
+        this.reviewDialog = false;
+        this.$socket.emit("review", 0, this.reviewImg, this.reviewBahavior, this.user);
       }
     },
     sockets: {
@@ -92,6 +124,12 @@ export default {
           this.review = "Failure!";
         }
       },
+      photoToJudge: function(data) {
+        this.reviewDialog = true;
+        this.reviewImg = data[0];
+        this.reviewBahavior = data[1];
+        this.user = data[3];
+      }
     }
   }
 </script>
