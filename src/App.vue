@@ -3,7 +3,7 @@
     <v-content>
       <v-container>
         <v-flex>
-        <v-dialog v-model="dialog" width="500">
+        <v-dialog persistent v-model="dialog" width="500">
           <v-card>
             <v-card-title class="headline grey lighten-2" primary-title>
               {{review}}
@@ -17,11 +17,10 @@
               <v-btn color="primary" icon @click="dialog = false">
                 <v-icon>close</v-icon>
               </v-btn>
-              <v-btn @click="test">Test</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="reviewDialog" width="500">
+        <v-dialog persistent v-model="reviewDialog" width="500">
           <v-card>
             <v-card-title class="headline grey lighten-2" primary-title>
               {{reviewBahavior}}
@@ -45,7 +44,7 @@
               Tutorial
             </v-card-title>
             <v-card-media min-height="300">
-              <video  style="display: none" width="200" height="120" autoplay ref="video"></video>
+              <video width="200" height="120" autoplay ref="video"></video>
               <canvas style="display: none" ref="canvas"  width="200" height="120"></canvas>
             </v-card-media>
             <v-card-actions>
@@ -92,8 +91,10 @@ export default {
         if (this.btnWord == "Snapshot") {
           this.snapshot();
         }
-        this.state = this.state + 1;
-        this.state = this.state % 2;
+        else {
+          this.state = this.state + 1;
+          this.state = this.state % 2;
+        }
       },
       snapshot: function() {
         let context = this.$refs.canvas.getContext("2d");
@@ -116,9 +117,11 @@ export default {
         let reviewResult = data[0];
         this.behavior = data[1];
         this.dialog = true;
+        this.disable = false;
         if (reviewResult === 1) {
           this.review = "Success!";
-          this.disable = false;
+          this.state = this.state + 1;
+          this.state = this.state % 2;
         }
         else {
           this.review = "Failure!";
@@ -128,7 +131,7 @@ export default {
         this.reviewDialog = true;
         this.reviewImg = data[0];
         this.reviewBahavior = data[1];
-        this.user = data[3];
+        this.user = data[2];
       }
     }
   }
