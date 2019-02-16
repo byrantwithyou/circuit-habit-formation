@@ -56,6 +56,7 @@ export default {
         let context = this.$refs.canvas.getContext("2d");
         let video = this.$refs.video;
         context.drawImage(video, 0, 0, 200, 120);
+        this.disable = true;
         this.$socket.emit("photo", this.$refs.canvas.toDataURL(), "resistor");
       }
     }
