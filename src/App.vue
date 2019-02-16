@@ -3,6 +3,23 @@
     <v-content>
       <v-container>
         <v-flex>
+        <v-dialog v-model="dialog" width="500">
+          <v-card>
+            <v-card-title class="headline grey lighten-2" primary-title>
+              {{review}}
+            </v-card-title>
+            <v-card-text>
+              {{behavior}}
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" icon @click="dialog = false">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
           <v-card>
             <v-card-title primary-title>
               Tutorial
@@ -35,7 +52,10 @@ export default {
     data: function () {
       return {
         state: 3,
-        disable: false
+        disable: false,
+        dialog: false,
+        review: "",
+        behavior: ""
       }
     },
     computed: {
@@ -50,7 +70,6 @@ export default {
         }
         this.state = this.state + 1;
         this.state = this.state % 2;
-
       },
       snapshot: function() {
         let context = this.$refs.canvas.getContext("2d");
@@ -59,6 +78,20 @@ export default {
         this.disable = true;
         this.$socket.emit("photo", this.$refs.canvas.toDataURL(), "resistor");
       }
+    },
+    sockets: {
+      reviewResult: function(data) {
+        let reviewResult = data[0];
+        this.behavior = data[1];
+        this.dialog = true;
+        if (reviewResult === 1) {
+          this.review = "Success!";
+          this.disable = false;
+        }
+        else {
+          this.review = "Failure!";
+        }
+      },
     }
   }
 </script>
