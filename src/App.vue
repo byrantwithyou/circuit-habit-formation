@@ -23,10 +23,10 @@
         <v-dialog  v-model="reviewDialog" width="500">
           <v-card>
             <v-card-title class="headline grey lighten-2" primary-title>
-              {{reviewBahavior}}
+              Insert the Resister
             </v-card-title>
-            <v-card-media>
-              <img :src="reviewImg" />
+            <v-card-media contain>
+              <v-img src="d.png"></v-img>
             </v-card-media>
             <v-card-text>
               <v-text-field v-model="comment" label="Comment" required></v-text-field>
@@ -82,7 +82,7 @@
             </v-card-media>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn :disabled="disable" @click="next">{{btnWord}}</v-btn>
+              <v-btn @click="next">{{btnWord}}</v-btn>
               <v-btn icon @click="toggleSearch"><v-icon>search</v-icon></v-btn>
             </v-card-actions>
           </v-card>
