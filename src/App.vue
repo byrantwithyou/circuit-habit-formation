@@ -78,6 +78,7 @@
                 <img height="150px" width="400px" src="d.png" />
               </div>
               <sort v-if="step==0"></sort>
+              <remind v-if="step!=0"></remind>
             </v-card-media>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -93,6 +94,7 @@
 
 <script>
 import sort from "@/components/sort.vue";
+import remind from "@/components/remind.vue";
 const btnWords = ["Snapshot", "Next", "", "Submit"];
 export default {
     mounted: function() {
@@ -120,7 +122,8 @@ export default {
       }
     },
     components: {
-      sort
+      sort,
+      remind
     },
     computed: {
       btnWord: function() {
@@ -165,6 +168,7 @@ export default {
         this.disable = false;
         if (reviewResult === 1) {
           this.review = "Success!";
+          this.step = this.step + 1;
           this.state = this.state + 1;
           this.state = this.state % 2;
         }

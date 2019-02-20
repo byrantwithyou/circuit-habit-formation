@@ -16,7 +16,7 @@
 
 <script>
 export default {
-    name: "Hello",
+    name: "sort",
     data: function () {
       return {
         radioGroup: 1
